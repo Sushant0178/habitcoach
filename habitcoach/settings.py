@@ -84,22 +84,25 @@ WSGI_APPLICATION = 'habitcoach.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
-# If we are on Vercel, 'POSTGRES_URL' will be available.
-# We then switch the engine to PostgreSQL.
-if 'POSTGRES_URL' in os.environ:
-    DATABASES['default'] = dj_database_url.config(
-        default=os.environ.get('POSTGRES_URL'),
+# --- SWITCH TO POSTGRES ONLY IF POSTGRES_URL EXISTS ---
+POSTGRES_URL = os.environ.get("POSTGRES_URL")
+
+if POSTGRES_URL:
+    DATABASES["default"] = dj_database_url.config(
+        default=POSTGRES_URL,
         conn_max_age=600,
         conn_health_checks=True,
+        ssl_require=True
     )
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 

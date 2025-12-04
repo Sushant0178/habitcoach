@@ -7,6 +7,9 @@ from tasks.models import Task
 from .ai_logic import get_ai_recommendation  # Import our new AI logic
 from datetime import timedelta # Add this import at the top
 from notifications.models import Badge  # Import Badge model
+from django.conf import settings
+print(settings.DATABASES)
+
 def home_view(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
@@ -15,7 +18,7 @@ def home_view(request):
 from datetime import timedelta # Add this import at the top
 
 @login_required
-def dashboard_view(request):
+def dashboard_view(request):  
     user = request.user
     today = timezone.now().date()
 
