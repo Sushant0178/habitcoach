@@ -1,14 +1,21 @@
+{"id":"93210","variant":"standard"}
 {
-  "version": 2,
+  "version": 3,
+  "buildCommand": "python3 manage.py collectstatic --noinput",
   "builds": [
     {
-      "src": "api/index.py",
+      "src": "manage.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
-    { "src": "/static/(.*)", "dest": "/static/$1" },
-    { "src": "/(.*)", "dest": "api/index.py" }
+    {
+      "src": "/static/(.*)",
+      "dest": "/staticfiles/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "manage.py"
+    }
   ]
 }
-
