@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path 
 import dj_database_url
 from pathlib import Path
@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3_67v2t(7n$)0c@-1lsdz*-mxx9ds%tcjv-rdt+18^3&^q-=%l'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'True'
 
-ALLOWED_HOSTS = ['.vercel.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
 
 
 # Application definition
@@ -94,14 +94,13 @@ DATABASES = {
 
 
 
-
+database_url = os.environ.get("DATABASE_URL")
 
 # --- SWITCH TO POSTGRES ONLY IF POSTGRES_URL EXISTS ---
 
 
 
-DATABASES["default"] = dj_database_url.parse("postgresql://habitcoach_django_render_user:QMldVDOiDEPUft4xiuItE9mQat6yOaBy@dpg-d4os9gm3jp1c73aidp50-a.oregon-postgres.render.com/habitcoach_django_render")
-
+DATABASES["default"] = dj_database_url.parse(database_url)
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
