@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- AI COACH CARD -->
+    <div class="card bg-dark text-white shadow-lg mb-4">
+        <div class="card-body p-4">
+            <h2 class="fw-bold"><i class="bi bi-robot"></i> AI Coach Says:</h2>
+            <p class="lead fst-italic">"{{ ai_advice }}"</p>
+        </div>
+    </div>
+
+
+    <!-- MAIN ROW -->
+    <div class="row">
+
+        <!-- LEFT SECTION -->
+        <div class="col-md-6 mb-4">
+
+            <!-- Today's Habits -->
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">Today's Habits</h5>
+                    <a href="{% url 'add_habit' %}" class="btn btn-sm btn-outline-primary">+ New</a>
+                </div>
+
+                <div class="card-body">
+                    {% if habit_data %}
+                        <div class="list-group list-group-flush">
+                            {% for item in habit_data %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="fw-bold">{{ item.habit.name }}</span>
+                                    <br>
+                                    <small class="text-muted">🔥 Streak: {{ item.habit.current_streak }}</small>
+                                </div>
+
+                                {% if item.completed %}
+                                    <a href="{% url 'toggle_habit' item.habit.id %}" class="btn btn-success btn-sm rounded-circle">
+                                        <i class="bi bi-check-lg"></i>
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'toggle_habit' item.habit.id %}" class="btn btn-outline-secondary btn-sm rounded-circle">
+                                        <i class="bi bi-circle"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center my-3">No habits tracked yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SECTION -->
+        <div class="col-md-6">
+
+            <!-- Mood Log -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <h5 class="fw-bold">How are you feeling?</h5>
+
+                    {% if todays_mood %}
+                        <div class="display-4 my-2">
+                            {% if todays_mood.mood == 'Happy' %} 😃
+                            {% elif todays_mood.mood == 'Sad' %} 😔
+                            {% else %} 😐 {% endif %}
+                        </div>
+                        <p class="text-muted">Logged as: {{ todays_mood.mood }}</p>
+                    {% else %}
+                        <p class="text-muted">You haven't logged your mood today.</p>
+                        <a href="{% url 'mood_home' %}" class="btn btn-outline-info btn-sm">Log Mood</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Tasks Section -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 fw-bold">Top Pending Tasks</h5>
+                </div>
+                <div class="card-body">
+                    {% if tasks %}
+                        <ul class="list-group list-group-flush">
+                            {% for task in tasks %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ task.title }}
+                                    <span class="badge bg-warning text-dark">{{ task.deadline|date:"M d" }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted text-center my-3">No pending tasks!</p>
+                    {% endif %}
+
+                    <div class="text-center mt-3">
+                        <a href="{% url 'task_home' %}" class="text-decoration-none small">View all tasks →</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MOOD CHART + BADGES -->
+    <div class="row mt-4">
+        
+        <!-- Mood Chart -->
+        <div class="col-md-8">
+            <div class="card shadow-sm h-100 mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="fw-bold mb-0">Mood Trends (Last 7 Days)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="moodChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges / Trophies -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="fw-bold mb-0">🏆 Trophy Case</h5>
+                </div>
+
+                <div class="card-body text-center">
+                    {% if badges %}
+                        <div class="row">
+                            {% for badge in badges %}
+                            <div class="col-6 mb-3">
+                                <i class="bi bi-award-fill text-warning" style="font-size: 2rem;"></i>
+                                <p class="small fw-bold mb-0">{{ badge.name }}</p>
+                                <small class="text-muted" style="font-size: 0.7rem;">{{ badge.earned_on }}</small>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-muted py-4">
+                            <i class="bi bi-trophy" style="font-size: 2.2rem; opacity: 0.3;"></i>
+                            <p class="mt-2">Keep up your habits to earn badges!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- CHART JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('moodChart').getContext('2d');
+    const moodChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ chart_dates|safe }},
+            datasets: [{
+                label: 'Mood Level',
+                data: {{ chart_moods|safe }},
+                borderColor: '#4f46e5',
+                backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                borderWidth: 2,
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 3,
+                    ticks: {
+                        callback: function(value) {
+                            if(value === 3) return 'Happy 😃';
+                            if(value === 2) return 'Normal 😐';
+                            if(value === 1) return 'Sad 😔';
+                            return '';
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+{% endblock %}

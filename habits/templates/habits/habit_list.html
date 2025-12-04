@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load custom_tags %}  {# for dict_get filter #}
+
+{% block content %}
+<div class="container col-md-8 mt-4">
+
+    <!-- Page Title -->
+    <h3 class="auth-title mb-4 text-center">Your Habits</h3>
+
+    <!-- Add New Habit Button -->
+    <div class="mb-4 text-center">
+        <a href="{% url 'add_habit' %}" class="btn btn-primary btn-lg">+ Add New Habit</a>
+    </div>
+
+    <div class="row g-3">
+        {% for habit in habits %}
+        <div class="col-md-6">
+            <div class="card shadow-sm p-3">
+                
+                <!-- Habit Name -->
+                <h5>{{ habit.name }}</h5>
+                
+                <!-- Category Badge -->
+                {% if habit.category %}
+                    <span class="badge bg-secondary">{{ habit.category }}</span>
+                {% endif %}
+
+                <!-- Current Streak -->
+                <p class="mt-2 mb-2">🔥 Streak: {{ habit.current_streak }} days</p>
+
+                <!-- Mark Complete Button -->
+                {% with record=habit_records|dict_get:habit.id %}
+                    {% if record and record.completed %}
+                        <a href="{% url 'toggle_habit' habit.id %}" class="btn btn-success w-100 mt-3">Completed ✅</a>
+                    {% else %}
+                        <a href="{% url 'toggle_habit' habit.id %}" class="btn btn-outline-primary w-100 mt-3">Mark Complete</a>
+                    {% endif %}
+                {% endwith %}
+
+            </div>
+        </div>
+        {% empty %}
+            <p class="text-center mt-4">You have no habits yet. Add one!</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

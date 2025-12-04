@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container col-md-5">
+    <div class="auth-card">
+        <h3 class="auth-title">Add New Habit</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary w-100 mt-2">Add Habit</button>
+        </form>
+        <p class="text-center mt-3">
+            <a href="{% url 'habit_list' %}" class="text-primary">Back to Habits</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

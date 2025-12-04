@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+
+<div class="auth-container">
+    <div class="auth-box">
+
+        {% if error %}
+            <div class="alert alert-danger text-center">{{ error }}</div>
+        {% endif %}
+
+        <h2 class="auth-title">Welcome Back</h2>
+
+        <form method="POST" class="auth-form" novalidate>
+            {% csrf_token %}
+
+            <input type="text" name="username" class="form-control auth-input" placeholder="Username" required>
+            <input type="password" name="password" class="form-control auth-input" placeholder="Password" required>
+
+            <button class="auth-btn">Login</button>
+        </form>
+
+        <p class="auth-footer">
+            Don’t have an account?
+            <a href="{% url 'signup' %}" class="auth-link">Sign Up</a>
+        </p>
+
+    </div>
+</div>
+
+{% endblock %}

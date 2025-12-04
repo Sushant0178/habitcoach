@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="home-container">
+    <div class="home-card text-center">
+        <h1 class="home-title">HabitCoach</h1>
+        <p class="home-desc">
+            Track your habits, build routines, and achieve your goals effortlessly. Stay consistent, motivated, and improve every day!
+        </p>
+        <div class="home-buttons mt-4">
+            <a href="{% url 'login' %}" class="btn btn-login me-2">Login</a>
+            <a href="{% url 'signup' %}" class="btn btn-signup">Sign Up</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

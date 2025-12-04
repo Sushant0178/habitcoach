@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="profile-card shadow-lg p-4">
+
+        <h3 class="text-center mb-4 fw-bold">User Profile</h3>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Profile Image -->
+            <div class="profile-image-wrapper text-center mb-4">
+                {% if profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" class="profile-image">
+                {% else %}
+                    <img src="{% static 'default.png' %}" class="profile-image">
+                {% endif %}
+            </div>
+
+            <!-- Form Fields -->
+            <div class="form-fields">
+                {{ form.as_p }}
+            </div>
+
+            <!-- Update Button -->
+            <button class="btn btn-primary w-100 py-2 mt-3 update-btn">
+                Update Profile
+            </button>
+        </form>
+
+        <!-- Logout Button -->
+        <a href="{% url 'logout' %}" class="btn btn-danger w-100 py-2 mt-3 logout-btn">
+            Logout
+        </a>
+
+    </div>
+</div>
+
+
+{% endblock %}

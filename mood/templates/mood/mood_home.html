@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-lg col-md-6">
+        <div class="card-header bg-primary text-white text-center">
+            <h4 class="mb-0"> <i class="bi bi-emoji-smile"></i> Daily Mood Log</h4>
+        </div>
+        <div class="card-body p-4">
+            
+            {% if already_logged %}
+                <div class="alert alert-warning text-center">
+                    You have already logged your mood today. <br> Submitting again will update it.
+                </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-4 text-center">
+                    <label class="form-label fw-bold mb-3">How are you feeling today?</label>
+                    {{ form.mood }}
+                </div>
+                <button class="btn btn-primary w-100 py-2">Save Mood</button>
+            </form>
+            
+            <div class="text-center mt-3">
+                <a href="{% url 'dashboard' %}" class="text-decoration-none">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}  
