@@ -1,10 +1,13 @@
 echo "BUILD START"
 
-# Install necessary packages from requirements.txt
+# Install necessary packages
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 
-# Collect static files for production
+# Run Migrations (Creates the database tables)
+python manage.py migrate 
+
+# Collect static files
 python manage.py collectstatic --noinput --clear
 
 echo "BUILD END"
