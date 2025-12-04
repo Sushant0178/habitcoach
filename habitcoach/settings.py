@@ -92,15 +92,13 @@ DATABASES = {
     }
 }
 
-
-
+# NEW CODE (Safe)
 database_url = os.environ.get("DATABASE_URL")
 
-# --- SWITCH TO POSTGRES ONLY IF POSTGRES_URL EXISTS ---
-
-
-
-DATABASES["default"] = dj_database_url.parse(database_url)
+# Only overwrite the default SQLite config if a DATABASE_URL is explicitly provided
+if database_url:
+    DATABASES["default"] = dj_database_url.parse(database_url)
+    
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
