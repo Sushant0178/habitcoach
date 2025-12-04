@@ -10,8 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-from pathlib import Path
-import os
+from pathlib import Path 
 import dj_database_url
 from pathlib import Path
 
@@ -93,16 +92,16 @@ DATABASES = {
     }
 }
 
-# --- SWITCH TO POSTGRES ONLY IF POSTGRES_URL EXISTS ---
-POSTGRES_URL = os.environ.get("POSTGRES_URL")
 
-if POSTGRES_URL:
-    DATABASES["default"] = dj_database_url.config(
-        default=POSTGRES_URL,
-        conn_max_age=600,
-        conn_health_checks=True,
-        ssl_require=True
-    )
+
+
+
+# --- SWITCH TO POSTGRES ONLY IF POSTGRES_URL EXISTS ---
+
+
+
+DATABASES["default"] = dj_database_url.parse("postgresql://habitcoach_django_render_user:QMldVDOiDEPUft4xiuItE9mQat6yOaBy@dpg-d4os9gm3jp1c73aidp50-a.oregon-postgres.render.com/habitcoach_django_render")
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
