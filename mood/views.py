@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import Mood
 from .forms import MoodForm
+from rest_framework import generics
+from .serializers import MoodSerializer
+
 
 @login_required
 def mood_home(request):
@@ -29,3 +32,13 @@ def mood_home(request):
         'form': form, 
         'already_logged': already_logged
     })
+
+
+class MoodListCreateAPI(generics.ListCreateAPIView):
+    queryset = Mood.objects.all()
+    serializer_class = MoodSerializer
+
+class MoodDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Mood.objects.all()
+    serializer_class = MoodSerializer
+    lookup_field = 'id'

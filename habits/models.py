@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
+from django.utils import timezone
+
 
 class Habit(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -39,7 +41,7 @@ class HabitRecord(models.Model):
     def __str__(self):
         return f"{self.habit.name} - {self.date}"
 
-from django.utils import timezone
+
 
 def today_completed(habit):
     today = timezone.now().date()

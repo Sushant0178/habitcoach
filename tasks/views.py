@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Task
 from .forms import TaskForm
+from rest_framework import generics
+from .serializers import TaskSerializer
 
 @login_required
 def tasks_home(request):
@@ -33,3 +35,15 @@ def toggle_task(request, task_id):
     task.completed = not task.completed
     task.save()
     return redirect('task_home')
+
+
+class TaskListCreateView(generics.ListCreateAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
+class TaskDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    lookup_field = 'id'
+
+

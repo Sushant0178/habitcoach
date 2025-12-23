@@ -20,7 +20,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me-locally')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Checks the Environment Variable 'DEBUG'. Defaults to False if not found.
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+
+# DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+DEBUG = True
 
 # ALLOWED_HOSTS
 # '*' allows all domains (easiest for Render). 
@@ -37,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',  # <--- Essential: Add rest_framework to apps
+
     # Your Apps
     'habits',
     'mood',
@@ -55,6 +59,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+REST_FRAMEWORK={
+            # Use Django's standard `django.contrib.auth` permissions,
+            # or allow read-only access for unauthenticated users.
+            'DEFAULT_PERMISSION_CLASSES': [
+                'rest_framework.permissions.AllowAny',
+            ],
+        }
 
 ROOT_URLCONF = 'habitcoach.urls'
 

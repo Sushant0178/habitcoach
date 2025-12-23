@@ -29,6 +29,14 @@ urlpatterns = [
     path('mood/', include('mood.urls')),
     path('notifications/', include('notifications.urls')), 
     path('tasks/', include('tasks.urls')), 
+    path('api/', include('habits.api_urls')),
+    path('api/', include('mood.api_urls')),
+    # path('api/', include('notifications.api_urls')),
+    path('api/', include('tasks.api_urls')),
+    
+    
+
+
 
 ]
 if settings.DEBUG:

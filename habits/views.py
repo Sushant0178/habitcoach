@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Habit
 from .forms import HabitForm
+from rest_framework import generics
+from .models import Habit
+from .serializers import HabitSerializer
 
 
 
@@ -46,3 +49,18 @@ def toggle_habit_complete(request, habit_id):
     record.completed = not record.completed
     record.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+# adding generic views for API
+
+
+
+class HabitListCreateAPI(generics.ListCreateAPIView):
+    queryset = Habit.objects.all()
+    serializer_class = HabitSerializer
+
+
+class HabitDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Habit.objects.all()
+    serializer_class = HabitSerializer
+    lookup_field = 'id'
