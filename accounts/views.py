@@ -36,6 +36,10 @@ def logout_view(request):
     return redirect('login')
 
 
+
+
+
+
 @login_required
 def profile_view(request):
     profile = request.user.userprofile
