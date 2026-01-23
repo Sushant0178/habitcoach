@@ -8,7 +8,8 @@ import os
 from pathlib import Path
 import dj_database_url  # Required for Render Database
 import os
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
